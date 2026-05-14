@@ -3,7 +3,6 @@ from flask_login import LoginManager, login_user, logout_user, login_required, c
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 
-import os
 
 from models import db, User, Post, Comment
 from forms import RegisterForm, LoginForm, PostForm, EditProfileForm
@@ -53,7 +52,7 @@ def save_picture(file):
 @login_manager.user_loader
 def load_user(user_id):
 
-    return User.query.get(int(user_id))
+    return db.session.get(User, int(user_id))
 
 
 @app.route('/register', methods=['GET', 'POST'])

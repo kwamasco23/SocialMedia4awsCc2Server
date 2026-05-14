@@ -4,8 +4,8 @@ WORKDIR /app
 
 COPY . .
 
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 EXPOSE 2000
 
-CMD ["python", "app.py"]
+CMD ["gunicorn", "-b", "0.0.0.0:2000", "app:app"]
