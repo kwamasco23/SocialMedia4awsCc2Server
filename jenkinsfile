@@ -11,7 +11,7 @@ pipeline {
         stage('Checkout Code') {
             steps {
                 git branch: 'main',
-                url: 'https://github.com/YOUR_USERNAME/socialmedia4awsec2server.git'
+                url: 'https://github.com/kwamasco23/SocialMedia4awsCc2Server.git'
             }
         }
 
@@ -37,8 +37,17 @@ pipeline {
                 sh '''
                     docker run -d \
                         --name $APP_NAME \
-                        -p $PORT:$PORT \
+                        -p 8009:2000 \
                         $APP_NAME
+                '''
+            }
+        }
+
+        stage('Health Check') {
+            steps {
+                sh '''
+                    sleep 5
+                    curl -f http://localhost:2000 || exit 1
                 '''
             }
         }
@@ -46,7 +55,6 @@ pipeline {
         stage('Verify Deployment') {
             steps {
                 sh '''
-                    echo "Checking running containers..."
                     docker ps
                 '''
             }
