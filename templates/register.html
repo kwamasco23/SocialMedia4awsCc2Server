@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="card p-4 mx-auto" style="max-width: 400px;">
+
+    <h2>Register</h2>
+
+    <form method="POST">
+
+        {{ form.hidden_tag() }}
+
+        {{ form.username(
+            class="form-control mb-3",
+            placeholder="Username"
+        ) }}
+
+        {{ form.password(
+            class="form-control mb-3",
+            placeholder="Password"
+        ) }}
+
+        {{ form.submit(
+            class="btn btn-primary w-100"
+        ) }}
+
+    </form>
+
+</div>
+
+{% endblock %}
