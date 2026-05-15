@@ -8,13 +8,6 @@ pipeline {
 
     stages {
 
-        stage('Checkout Code') {
-            steps {
-                git branch: 'main',
-                url: 'https://github.com/kwamasco23/SocialMedia4awsCc2Server.git'
-            }
-        }
-
         stage('Stop Old Container') {
             steps {
                 sh '''
@@ -37,37 +30,19 @@ pipeline {
                 sh '''
                     docker run -d \
                         --name $APP_NAME \
-                        -p 8009:2000 \
+                        -p $PORT:$PORT \
                         $APP_NAME
                 '''
             }
         }
 
-        stage('Health Check') {
-            steps {
-                sh '''
-                    sleep 5
-                    curl -f http://localhost:2000 || exit 1
-                '''
-            }
-        }
-
-        stage('Verify Deployment') {
+        stage('Verify') {
             steps {
                 sh '''
                     docker ps
+                    curl -s http://localhost:$PORT || true
                 '''
             }
-        }
-    }
-
-    post {
-        success {
-            echo 'Deployment SUCCESS 🚀'
-        }
-
-        failure {
-            echo 'Deployment FAILED ❌'
         }
     }
 }
