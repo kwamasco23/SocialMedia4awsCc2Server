@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         APP_NAME = "socialmedia4awsec2server"
-        PORT = "4111"
+        PORT = "3100"
     }
 
     stages {
