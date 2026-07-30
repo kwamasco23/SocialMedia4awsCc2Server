@@ -109,30 +109,34 @@ REQUEST_LATENCY = Histogram(
     ["endpoint"]
 )
 
-
 @app.before_request
 def before_request():
-    request.start_time = time.time()
+    """Record the start time for each request."""
+    request.start_time = time.perf_counter()
 
 
 @app.after_request
 def after_request(response):
+    """Record Prometheus metrics for completed requests."""
     endpoint = request.endpoint or "unknown"
 
-    REQUEST_COUNT.labels(
-        method=request.method,
-        endpoint=endpoint,
-        status=response.status_code
-    ).inc()
+    # Don't record metrics for Prometheus scraping itself
+    if endpoint != "metrics":
+        REQUEST_COUNT.labels(
+            method=request.method,
+            endpoint=endpoint,
+            status=response.status_code,
+        ).inc()
 
-    REQUEST_LATENCY.labels(
-        endpoint=endpoint
-    ).observe(
-        time.time() - request.start_time
-    )
+        duration = 0.0
+        if hasattr(request, "start_time"):
+            duration = time.perf_counter() - request.start_time
+
+        REQUEST_LATENCY.labels(
+            endpoint=endpoint,
+        ).observe(duration)
 
     return response
-
 
 @app.route("/metrics")
 def metrics():
