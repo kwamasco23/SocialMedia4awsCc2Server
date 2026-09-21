@@ -52,3 +52,5 @@ class EditProfileForm(FlaskForm):
     profile_pic = FileField('Profile Picture')
 
     submit = SubmitField('Save')
+
+    # PLACEHOLDDER TEST
