@@ -53,4 +53,3 @@ class EditProfileForm(FlaskForm):
 
     submit = SubmitField('Save')
 
-    # PLACEHOLDDER TEST
