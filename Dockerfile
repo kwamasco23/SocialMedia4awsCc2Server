@@ -11,4 +11,3 @@ EXPOSE 3100
 CMD ["python", "app.py"]
 
 
-#test placeholder text
